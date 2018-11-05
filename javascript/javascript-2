@@ -1,0 +1,30 @@
+var fn1 = () => {
+    console.log('fn1')
+    return Promise.resolve(2)
+}
+
+var fn2 = () => new Promise(resolve => {
+    console.log('fn2')
+    setTimeout(() => resolve(4), 1000)
+})
+
+function promiseReduce(asyncFunctions, reduce, initialValue) {
+    return new Promise(resolve => {
+        asyncFunctions.forEach(async function (item, i, arr) {
+            if (i > 0) await asyncFunctions[i - 1]
+            asyncFunctions[i]().then(function (result) {
+                initialValue = reduce(result, initialValue);
+                if (i == (asyncFunctions.length - 1)) resolve(initialValue);
+            })
+        });
+    });
+}
+
+promiseReduce(
+        [fn1, fn2],
+        function (memo, value) {
+            console.log('reduce')
+            return memo * value
+        },
+        10)
+    .then(console.log)
