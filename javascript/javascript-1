@@ -1,0 +1,16 @@
+function sum(a) {
+    inSum = function (c) {
+        if (c == undefined) {
+            return a;
+        }
+        a = c + a;
+        if (c != undefined) {
+            return sum(a);
+        }
+    }
+
+    inSum.valueOf = function () {
+        return a;
+    }
+    return inSum;
+}
