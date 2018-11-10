@@ -1,12 +1,16 @@
 function sum(a) {
-    return function (c) {
+    inSum = function (c) {
         if (c == undefined) {
-            return a
+            return a;
         }
         a = c + a;
         if (c != undefined) {
-            return sum(a)
+            return sum(a);
         }
     }
+
+    inSum.valueOf = function () {
+        return a;
+    }
+    return inSum;
 }
-sum(2)(3)(5)(7)();
