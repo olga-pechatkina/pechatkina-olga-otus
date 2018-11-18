@@ -1,22 +1,22 @@
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const http = require('http')
 
 function request(N, type) {
     if (type == 0) {
         for (var i = 0; i < N; i++) {
             var promise = new Promise(resolve => {
-                var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open("GET", "http://127.0.0.1:3000", true);
-                xmlHttp.send(null);
+                http.get('http://127.0.0.1:3000');
             })
         }
     }
     if (type == 1) {
         for (var i = 0; i < N; i++) {
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.open("GET", "http://127.0.0.1:3000", true);
-            xmlHttp.send(null);
+            http.get('http://127.0.0.1:3000');
         }
     }
 }
 
-request(1, 0);
+const args = process.argv.slice(2)
+var N = args[0];
+var type = args[1];
+
+request(N, type);
