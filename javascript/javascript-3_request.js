@@ -15,7 +15,7 @@ function request(N, type) {
     }
 }
 
-const args = process.argv.slice(2)
+const args = process.argv.slice(2);
 var N = args[0];
 var type = args[1];
 
