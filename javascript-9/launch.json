@@ -1,0 +1,9 @@
+{
+    "name": "javascipt-9",
+    "version": "1.0.0",
+    "dependencies": {
+      "express": "^4.16.4",
+      "mongodb": "^2.2.36",
+      "xml2js": "^0.4.19"
+    }
+  }
