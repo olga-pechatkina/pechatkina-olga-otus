@@ -88,7 +88,7 @@ getPath - поиск уникального селектора
 ```javascript
 $0 // HTMLElement
 getPath($0) // => "..."
-
+```
 в javascript-10
 
 7. Custom Elements Tree
