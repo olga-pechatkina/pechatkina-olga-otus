@@ -1,0 +1,13 @@
+_TMP/
+node_modules/
+/build/
+/.idea/
+.vscode/
+.jsbeautifyrc
+
+# from old version
+prod/
+/js/wfmt2.js
+
+# Vue.js build artifacts
+src/main/vue/vue_bundle*.*

@@ -1,0 +1,15 @@
+{
+  "name": "keepmoving",
+  "version": "1.0.0",
+  "description": "moving from PRTool app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Olga Pechatkina",
+  "type": "module",
+  "dependencies": {
+    "oracledb": "^5.0.0",
+    "requirejs": "^2.3.6"
+  }
+}
