@@ -11,19 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-.star-empty
-{
-  background: url(./nolike.jpg) no-repeat;
-  width: 90px;
-  height: 90px;
-  display:block;
-}
-
-.star-full
-{
-  background: url(./like.jpg) no-repeat;
-  width: 90px;
-  height: 90px;
-  display:block;
-}
