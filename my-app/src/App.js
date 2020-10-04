@@ -1,87 +1,80 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './App.css';
-import {WeatherDisplay} from './WeatherDisplay';
-import takeWeatherCity from './takeWeatherCity.js'
+import Filter from './Filter.js';
+import ArticleList from './ArticleList.js';
+import axios from 'axios';
+import mockAPI from './mock/mock.js'
 
-class App extends Component {
+const serverAPI = {
+  getArticles:() => axios.get("/articles"),
+}
+const currentAPI = serverAPI;
+
+class App extends React.Component {
   constructor() {
     super();
 
-    var favorites = [];
-    favorites = localStorage.favorites ? JSON.parse(localStorage.favorites) : null;
-    
     this.state = {
-      activePlace: 0,
-      cities: [],
-      favorites: favorites
+      lang_RU: false,
+      lang_EN: false,
+      hot: false,
+      intermediate: false,
+      advanced: false,
+      hardcore: false,
+      academic: false,
+      text: '',
+      articles:[]
     };
   }
 
   componentDidMount(){
-    takeWeatherCity().then((weatherFromDB) =>{
-      this.setState({ 
-        cities: weatherFromDB?weatherFromDB.map(item => item.city):[]
-      });  
-    });
+    Object.assign(currentAPI, mockAPI);
+    currentAPI.getArticles()
+      .then(data => {
+        let arr = JSON.parse(data);
+        this.setState({ 
+          articles: arr["articles"]
+        });
+      })
   }
 
-  toggleFavorite(place) {
-    this.isPlaceInFavorites(place)? this.removeFromFavorites(place) : this.addToFavorites(place);
-  }
+  _handleLangRUChange = value => this.setState({lang_RU: value});
+  _handleLangENChange = value => this.setState({lang_EN: value});
+  _handleHotChange = value => this.setState({hot: value});
+  _handleIntermediateChange = value => this.setState({intermediate: value});
+  _handleAdvancedChange = value => this.setState({advanced: value});
+  _handleHardcoreChange = value => this.setState({hardcore: value});
+  _handleAcademicChange = value => this.setState({academic: value});  
+  _handleTextChange = value => this.setState({text: value});  
 
-  addToFavorites(place) {
-    this.setState({
-      favorites: this.state.favorites.concat({place})
-    });
-
-    localStorage.favorites = JSON.stringify(this.state.favorites);
-  }
-
-  removeFromFavorites(place) {
-    this.setState({
-      favorites: this.state.favorites.filter((item) => item.place !== place)
-    });
-
-    localStorage.favorites = JSON.stringify(this.state.favorites);
-  }
-
-  isPlaceInFavorites(place) {
-    return (this.state.favorites.find ((item) =>item.place === place));
-  }
-
-  render() {
-    const activePlace = this.state.activePlace;
-    const isFavorite = this.isPlaceInFavorites(this.state.activePlace);
-
-    return ( 
-      <div className = "App" >
-        <select onChange = {
-          () => {
-            this.setState({
-              activePlace: document.getElementsByTagName('select')[0].selectedIndex
-            });
-          }
-        } >
-        {
-          this.state.cities.map((place, index) => ( <option key = {index} >
-            {place} </option> 
-          ))
-        } </select> 
-        <WeatherDisplay place = {
-          this.state.cities[activePlace]
-        }
-        digit = {
-          activePlace
-        }
-        favorite = {
-          isFavorite
-        }
-        onFavoriteToggle = {
-          place => this.toggleFavorite(place)
-        }
+  render(){
+    return (
+      <div className="App">
+        <Filter
+          lang_RU={this.state.lang_RU} 
+          lang_EN={this.state.lang_EN} 
+          hot={this.state.hot} 
+          intermediate={this.state.intermediate}   
+          advanced={this.state.advanced} 
+          hardcore={this.state.hardcore} 
+          academic={this.state.academic}  
+          text={this.state.text}                    
+          onLangRUChange={this._handleLangRUChange} 
+          onLangENChange={this._handleLangENChange}
+          onHotChange={this._handleHotChange} 
+          onIntermediateChange={this._handleIntermediateChange}
+          onAdvancedChange={this._handleAdvancedChange}
+          onHardcoreChange={this._handleHardcoreChange} 
+          onAcademicChange={this._handleAcademicChange}
+          onTextChange={this._handleTextChange}
         />
-      </div> 
+        <ArticleList
+          articles={this.state.articles.filter(item => (((item.lang === 'RU' && this.state.lang_RU)||(item.lang === 'EN' && this.state.lang_EN) || (!this.state.lang_RU && !this.state.lang_EN))
+          &&((item.articleComplexity === 'INTERMEDIATE' && this.state.intermediate) || (item.articleComplexity === 'ADVANCED' && this.state.advanced) || (item.articleComplexity === 'HARDCORE' && this.state.hardcore) || ((item.articleComplexity === 'ACADEMIC' && this.state.academic))||(!this.state.intermediate && !this.state.advanced && !this.state.hardcore && !this.state.academic))
+          && (item.hot === this.state.hot || !this.state.hot) && ((item.articleAuthor.indexOf(this.state.text) !== -1) || (item.articleText.indexOf(this.state.text) !== -1) || !this.state.text)))}
+        />
+      </div>
     );
-  } 
+  }
 }
 export default App;
